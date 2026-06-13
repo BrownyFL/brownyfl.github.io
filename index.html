@@ -702,17 +702,7 @@
 <section id="about">
   <div class="about-grid">
     <div class="about-photo-wrap">
-      <div class="about-photo-placeholder" onclick="document.getElementById('about-photo-input').click()">
-        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-          <rect x="4" y="10" width="40" height="32" rx="2" stroke="#c9a96e" stroke-width="1.5"/>
-          <circle cx="24" cy="26" r="8" stroke="#c9a96e" stroke-width="1.5"/>
-          <circle cx="24" cy="26" r="3" fill="#c9a96e" opacity="0.4"/>
-          <path d="M17 10 L19 6 H29 L31 10" stroke="#c9a96e" stroke-width="1.5" fill="none"/>
-        </svg>
-        <p>Загрузить фото</p>
-      </div>
-      <input type="file" id="about-photo-input" accept="image/*">
-      <img id="about-photo-img" src="" alt="Photo">
+      <img src="photo.png" alt="Константин" style="width:100%;height:100%;object-fit:cover;border-radius:2px;">
     </div>
     <div class="about-content">
       <div class="section-label reveal" data-num="01 —">О себе</div>
@@ -765,14 +755,14 @@
       </div>
       <div class="service-item reveal reveal-delay-1">
         <span class="service-num">02</span>
-        <span class="service-name">Frontend</span>
-        <span class="service-desc">React, Next.js, TypeScript, анимации и интерактивные интерфейсы</span>
+        <span class="service-name">Лендинги и сайты</span>
+        <span class="service-desc">Адаптивная вёрстка, анимации, формы обратной связи — под ключ</span>
         <span class="service-arrow">→</span>
       </div>
       <div class="service-item reveal reveal-delay-2">
         <span class="service-num">03</span>
-        <span class="service-name">Backend</span>
-        <span class="service-desc">Node.js API, базы данных, аутентификация, деплой</span>
+        <span class="service-name">Telegram-боты</span>
+        <span class="service-desc">Боты для бизнеса — уведомления, бронирование, автоматизация</span>
         <span class="service-arrow">→</span>
       </div>
     </div>
@@ -793,8 +783,8 @@
           <a href="https://t.me/username" class="contact-link" id="contact-tg" target="_blank">
             <span id="tg-text">@username</span>
           </a>
-          <a href="https://github.com/username" class="contact-link" id="contact-gh" target="_blank">
-            <span id="gh-text">github.com/username</span>
+          <a href="https://github.com/brownyfl" class="contact-link" id="contact-gh" target="_blank">
+            <span id="gh-text">github.com/brownyfl</span>
           </a>
         </div>
       </div>
@@ -973,13 +963,19 @@ document.getElementById('about-photo-input').addEventListener('change', function
 
 // ── Works data
 const defaultWorks = [
-  { title: 'E-commerce Platform', tag: 'Full-Stack', desc: 'Современный интернет-магазин с React, Node.js и PostgreSQL', img: '', link: '#' },
-  { title: 'Brand Identity & Site', tag: 'Web Design', desc: 'Разработка фирменного стиля и лендинга для tech-стартапа', img: '', link: '#' },
-  { title: 'SaaS Dashboard', tag: 'UI/UX + Dev', desc: 'Аналитический дашборд с real-time данными и сложными графиками', img: '', link: '#' },
+  { 
+    title: 'Verde Tennis Club', 
+    tag: 'Frontend', 
+    desc: 'Многостраничный сайт для премиального теннисного и падел-клуба — онлайн-бронирование кортов, видео-хедер, адаптивный дизайн', 
+    img: '', 
+    link: 'https://brownyfl.github.io/verde-tennis/' 
+  },
+  { title: 'В разработке', tag: 'Скоро', desc: 'Новый проект в процессе — следите за обновлениями', img: '', link: '#' },
+  { title: 'В разработке', tag: 'Скоро', desc: 'Новый проект в процессе — следите за обновлениями', img: '', link: '#' },
 ];
-let works = JSON.parse(localStorage.getItem('portfolio-works') || 'null') || defaultWorks;
+let works = [...defaultWorks];
 
-function saveWorks() { localStorage.setItem('portfolio-works', JSON.stringify(works)); }
+function saveWorks() { /* данные хранятся в коде */ }
 
 function renderWorks() {
   const grid = document.getElementById('works-grid');
