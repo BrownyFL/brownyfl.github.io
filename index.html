@@ -973,9 +973,18 @@ const defaultWorks = [
   { title: 'В разработке', tag: 'Скоро', desc: 'Новый проект в процессе — следите за обновлениями', img: '', link: '#' },
   { title: 'В разработке', tag: 'Скоро', desc: 'Новый проект в процессе — следите за обновлениями', img: '', link: '#' },
 ];
-let works = [...defaultWorks];
+const STORAGE_KEY = 'portfolio_works_v1';
+function loadWorks() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : [...defaultWorks];
+  } catch(e) { return [...defaultWorks]; }
+}
+let works = loadWorks();
 
-function saveWorks() { /* данные хранятся в коде */ }
+function saveWorks() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(works)); } catch(e) {}
+}
 
 function renderWorks() {
   const grid = document.getElementById('works-grid');
