@@ -947,19 +947,6 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
 revealEls.forEach(el => obs.observe(el));
 
-// ── About photo upload
-document.getElementById('about-photo-input').addEventListener('change', function() {
-  const file = this.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = document.getElementById('about-photo-img');
-    img.src = e.target.result;
-    img.style.display = 'block';
-    document.querySelector('.about-photo-placeholder').style.display = 'none';
-  };
-  reader.readAsDataURL(file);
-});
 
 // ── Works data
 const defaultWorks = [
