@@ -732,9 +732,6 @@
       <div class="section-label" data-num="02 —">Портфолио</div>
       <h2 class="section-title">Избранные <em>работы</em></h2>
     </div>
-    <button class="add-work-btn" onclick="openModal()">
-      <span>+</span> Добавить работу
-    </button>
   </div>
   <div class="works-grid reveal reveal-delay-1" id="works-grid">
     <!-- default cards added by JS -->
@@ -802,41 +799,6 @@
   <span>Разработано с ♥</span>
 </footer>
 
-<!-- Add Work Modal -->
-<div class="modal-backdrop" id="modal" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <h3 class="modal-title">Добавить <em style="font-style:italic;color:var(--accent)">работу</em></h3>
-    <div class="form-group">
-      <label class="form-label">Название проекта</label>
-      <input class="form-input" id="work-title" placeholder="Например: E-commerce платформа">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Категория / Тег</label>
-      <input class="form-input" id="work-tag" placeholder="Web Design, Full-Stack, Mobile...">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Описание</label>
-      <textarea class="form-textarea" id="work-desc" placeholder="Краткое описание проекта..."></textarea>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Ссылка на проект</label>
-      <input class="form-input" id="work-link" placeholder="https://...">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Обложка проекта</label>
-      <div class="form-upload" onclick="document.getElementById('work-img-input').click()">
-        <img id="preview-img" src="" alt="">
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M6 22L11 16l4 5 5-7 6 8" stroke="#c9a96e" stroke-width="1.5" stroke-linejoin="round"/><rect x="2" y="4" width="28" height="24" rx="2" stroke="#c9a96e" stroke-width="1.5"/><circle cx="10" cy="11" r="2" fill="#c9a96e" opacity="0.5"/></svg>
-        <p id="upload-label">Нажмите для загрузки изображения</p>
-      </div>
-      <input type="file" id="work-img-input" accept="image/*" style="display:none">
-    </div>
-    <div class="modal-actions">
-      <button class="btn-submit" onclick="addWork()">Добавить в портфолио</button>
-      <button class="btn-cancel" onclick="closeModal()">Отмена</button>
-    </div>
-  </div>
-</div>
 
 <script>
 // ── Year
@@ -941,18 +903,7 @@ const defaultWorks = [
   { title: 'В разработке', tag: 'Скоро', desc: 'Новый проект в процессе — следите за обновлениями', img: '', link: '#' },
   { title: 'В разработке', tag: 'Скоро', desc: 'Новый проект в процессе — следите за обновлениями', img: '', link: '#' },
 ];
-const STORAGE_KEY = 'portfolio_works_v1';
-function loadWorks() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : [...defaultWorks];
-  } catch(e) { return [...defaultWorks]; }
-}
-let works = loadWorks();
-
-function saveWorks() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(works)); } catch(e) {}
-}
+const works = [...defaultWorks];
 
 function renderWorks() {
   const grid = document.getElementById('works-grid');
@@ -971,8 +922,6 @@ function renderWorks() {
         <div class="work-card-overlay">
           <div class="work-card-actions">
             ${w.link && w.link !== '#' ? `<a href="${w.link}" target="_blank" class="work-action-btn">Открыть →</a>` : ''}
-            <button class="work-action-btn" onclick="editWork(${i})">Редактировать</button>
-            <button class="work-action-btn" onclick="deleteWork(${i})">Удалить</button>
           </div>
         </div>
       </div>
@@ -991,66 +940,6 @@ function renderWorks() {
 }
 renderWorks();
 
-// ── Modal
-let editingIndex = null;
-function openModal(idx) {
-  editingIndex = (idx !== undefined) ? idx : null;
-  const modal = document.getElementById('modal');
-  if(editingIndex !== null) {
-    const w = works[editingIndex];
-    document.getElementById('work-title').value = w.title;
-    document.getElementById('work-tag').value = w.tag;
-    document.getElementById('work-desc').value = w.desc;
-    document.getElementById('work-link').value = w.link || '';
-    if(w.img) {
-      const pi = document.getElementById('preview-img');
-      pi.src = w.img; pi.style.display = 'block';
-      document.getElementById('upload-label').textContent = 'Нажмите для замены';
-    }
-  } else {
-    document.getElementById('work-title').value = '';
-    document.getElementById('work-tag').value = '';
-    document.getElementById('work-desc').value = '';
-    document.getElementById('work-link').value = '';
-    const pi = document.getElementById('preview-img');
-    pi.src = ''; pi.style.display = 'none';
-    document.getElementById('upload-label').textContent = 'Нажмите для загрузки изображения';
-    currentImgData = null;
-  }
-  modal.classList.add('open');
-}
-function closeModal() { document.getElementById('modal').classList.remove('open'); currentImgData = null; }
-
-let currentImgData = null;
-document.getElementById('work-img-input').addEventListener('change', function() {
-  const file = this.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    currentImgData = e.target.result;
-    const pi = document.getElementById('preview-img');
-    pi.src = currentImgData; pi.style.display = 'block';
-    document.getElementById('upload-label').textContent = 'Нажмите для замены';
-  };
-  reader.readAsDataURL(file);
-});
-
-function addWork() {
-  const title = document.getElementById('work-title').value.trim();
-  const tag   = document.getElementById('work-tag').value.trim();
-  const desc  = document.getElementById('work-desc').value.trim();
-  const link  = document.getElementById('work-link').value.trim();
-  if(!title) { document.getElementById('work-title').focus(); return; }
-  const work = { title, tag: tag || 'Project', desc: desc || '', link: link || '#', img: currentImgData || (editingIndex !== null ? works[editingIndex].img : '') };
-  if(editingIndex !== null) { works[editingIndex] = work; }
-  else { works.unshift(work); }
-  saveWorks(); renderWorks(); closeModal();
-}
-function editWork(i) { openModal(i); }
-function deleteWork(i) {
-  if(confirm('Удалить работу "' + works[i].title + '"?')) {
-    works.splice(i,1); saveWorks(); renderWorks();
-  }
-}
 
 
 // ── Parallax on hero grid
